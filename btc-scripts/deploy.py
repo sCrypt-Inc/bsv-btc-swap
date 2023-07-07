@@ -18,6 +18,9 @@ def main():
     fee = 0.00000125      # Fee in new transaction
     x = 'f00cfd8df5f92d5e94d1ecbd9b427afd14e03f8a3292ca4128cd59ef7b9643bc'
     xHash = '1908c59a71781b7a44182ec39dd84a8a9e13dc31691fead8631730f5f5ab7b65'
+
+    # Make sure the person who generates the secret value "x" has a longer timeout
+    # duration to avoid them unlocking and withdrawing at the same time to steal funds.
     nBlocksLocked = '06'  # 6 blocks ~ 1 hr
 
     # HTLC script:

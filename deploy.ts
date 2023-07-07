@@ -36,7 +36,10 @@ async function main() {
 
     // Amount to be locked in the contract
     const amount = 10000
-    // LockTime after which the contracts "cancel" method can be called
+
+    // LockTime after which the contracts "cancel" method can be called.
+    // Make sure the person who generates the secret value "x" has a longer timeout
+    // duration to avoid them unlocking and withdrawing at the same time to steal funds.
     const lockTimeMin = 1673510000n
 
     const x = toByteString(
