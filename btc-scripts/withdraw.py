@@ -16,7 +16,6 @@ def main():
     vout = 0 # Previous transaction ouput index
     amount = 0.00001725   # Amount in output
     fee = 0.00000125      # Fee in new transaction
-    locktime = bytes.fromhex('64A7F990') # 1688730000
     x = 'f00cfd8df5f92d5e94d1ecbd9b427afd14e03f8a3292ca4128cd59ef7b9643bc'
     xHash = '1908c59a71781b7a44182ec39dd84a8a9e13dc31691fead8631730f5f5ab7b65'
     nBlocksLocked = '06'  # 6 blocks ~ 1 hr
@@ -42,11 +41,15 @@ def main():
     fromAddress = P2wshAddress.from_script(htlc_redeem_script)
 
     # Create transaction input from tx id of UTXO.
-    txin = TxInput(txid, vout, sequence=bytes.fromhex('FFFFFFFE'))
+    # Create transaction input from tx id of UTXO.
+    # nSequence is used to enforce a relative lock-time.
+    # It is encoded in little-endian hex format, set 7 blocks in the future.
+    # Read BIP-68 for more info.
+    txin = TxInput(txid, vout, sequence=bytes.fromhex('07000000'))
 
     txOut1 = TxOutput(to_satoshis(amount - fee), toAddress.to_script_pub_key())
 
-    tx = Transaction([txin], [txOut1], has_segwit=True, locktime=locktime)
+    tx = Transaction([txin], [txOut1], has_segwit=True)
 
     # NOTE: In P2WSH, the argument for OP_IF and OP_NOTIF MUST be exactly an empty vector or 0x01, or the script evaluation fails immediately.
 
